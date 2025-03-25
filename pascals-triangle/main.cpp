@@ -1,18 +1,57 @@
 #include <iostream>
+#include <limits>
 #include <vector>
 
-void generate_triangle()
+auto generate_next_row(const std::vector<int> &last_row)
 {
-    std::vector data{1};
-    for (auto number : data)
+    std::vector next_row{1};
+
+    if (last_row.empty())
     {
-        std::cout << number << ' ';
+        return next_row;
     }
 
-    std::cout << '\n';
+    for (size_t idx = 0; idx < last_row.size() - 1; ++idx)
+    {
+        next_row.emplace_back(last_row[idx] + last_row[idx + 1]);
+    }
+
+    next_row.emplace_back(1);
+
+    return next_row;
+}
+
+auto generate_triangle(int number_of_rows)
+{
+    if (0 == number_of_rows)
+    {
+        return std::vector<std::vector<int>>{};
+    }
+
+    std::vector<std::vector<int>> triangle{{1}};
+    for (int row_number = 1; row_number < number_of_rows; ++row_number)
+    {
+        triangle.push_back(generate_next_row(triangle.back()));
+    }
+
+    return triangle;
+}
+
+void show_triangle(const std::vector<std::vector<int>> &triangle)
+{
+    for (auto row : triangle)
+    {
+        for (auto number : row)
+        {
+            std::cout << number << ' ';
+        }
+
+        std::cout << '\n';
+    }
 }
 
 int main()
 {
-    generate_triangle();
+    auto triangle = generate_triangle(5);
+    show_triangle(triangle);
 }
