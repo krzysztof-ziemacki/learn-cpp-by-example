@@ -81,8 +81,48 @@ void show_triangle(std::ostream &output_stream, const std::vector<std::vector<in
     }
 }
 
+bool is_palindrome(const std::vector<int> &v)
+{
+    auto forward = v | std::views::take(v.size() / 2);
+    auto backward = v | std::views::reverse | std::views::take(v.size() / 2);
+
+    return std::ranges::equal(forward, backward);
+}
+
+
+void check_triangle_properties(const std::vector<std::vector<int>> &triangle)
+{
+    for(size_t row_number = 0; row_number < triangle.size(); ++row_number)
+    {
+        const auto &row = triangle[row_number];
+
+        // each row starts with number 1
+        assert(row.front() == 1);
+
+        // each row ends with number 1
+        assert(row.back() == 1);
+
+        // n-th row has n+1 numbers
+        assert(row.size() == row_number + 1);
+
+        // all numbers are positive
+        assert(std::ranges::all_of(row, [](auto x) { return x >= 0; }));
+
+        auto negative = [](int x) { return x < 0; };
+        auto negatives = row | std::ranges::views::filter(negative);
+        assert(negatives.empty());
+
+        // sum of numbers in n-th row is equal to 2 to the power of n
+        assert(std::accumulate(row.begin(), row.end(), 0) == std::pow(2, row_number));
+
+        // each row is palindrome
+        assert(is_palindrome(row));
+    }
+}
+
 int main()
 {
-    auto triangle = generate_triangle(15);     
+    auto triangle = generate_triangle(15);    
+    check_triangle_properties(triangle); 
     show_triangle(std::cout, triangle);
 }
