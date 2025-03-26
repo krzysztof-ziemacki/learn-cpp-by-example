@@ -1,4 +1,6 @@
+#include <algorithm>
 #include <iostream>
+#include <iterator>
 #include <vector>
 
 auto generate_next_row(const std::vector<int> &last_row)
@@ -36,21 +38,20 @@ auto generate_triangle(int number_of_rows)
     return triangle;
 }
 
-void show_triangle(const std::vector<std::vector<int>> &triangle)
+template<typename T>
+std::ostream& operator << (std::ostream &output_stream, const std::vector<std::vector<T>> &triangle)
 {
-    for (auto row : triangle)
-    {
-        for (auto number : row)
-        {
-            std::cout << number << ' ';
-        }
-
-        std::cout << '\n';
+    for(const auto &row : triangle)
+    {        
+        std::ranges::copy(row, std::ostream_iterator<T>(output_stream, " "));        
+        output_stream << '\n';
     }
+
+    return output_stream;
 }
 
 int main()
 {
-    auto triangle = generate_triangle(5);
-    show_triangle(triangle);
+    auto triangle = generate_triangle(15);
+    std::cout << triangle;
 }
