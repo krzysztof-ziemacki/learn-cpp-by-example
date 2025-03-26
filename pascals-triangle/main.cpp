@@ -1,6 +1,11 @@
 #include <algorithm>
+#include <cassert>
+#include <format>
 #include <iostream>
 #include <iterator>
+#include <cmath>
+#include <numeric>
+#include <ranges>
 #include <vector>
 
 auto generate_next_row(const std::vector<int> &last_row)
@@ -50,8 +55,34 @@ std::ostream& operator << (std::ostream &output_stream, const std::vector<std::v
     return output_stream;
 }
 
+void show_triangle(std::ostream &output_stream, const std::vector<std::vector<int>> &triangle)
+{
+    size_t final_row_size = triangle.back().size();
+    
+    // three spaces per row
+    std::string spaces(final_row_size * 3, ' ');
+
+    for(const auto &row : triangle)
+    {
+        output_stream << spaces;
+
+        if(spaces.size() > 3) 
+        {
+            // shrinks the spaces bu three for each row
+            spaces.resize(spaces.size() - 3);
+        }
+
+        for(const auto &element : row)
+        {
+            output_stream << std::format("{: ^{}}", element, 6);
+        }
+
+        output_stream << '\n';
+    }
+}
+
 int main()
 {
-    auto triangle = generate_triangle(15);
-    std::cout << triangle;
+    auto triangle = generate_triangle(15);     
+    show_triangle(std::cout, triangle);
 }
