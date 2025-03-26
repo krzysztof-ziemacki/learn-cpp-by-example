@@ -1,5 +1,4 @@
 #include <iostream>
-#include <limits>
 #include <vector>
 
 auto generate_next_row(const std::vector<int> &last_row)
