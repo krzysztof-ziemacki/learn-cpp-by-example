@@ -70,7 +70,7 @@ void show_triangle(std::ostream &output_stream, const std::vector<std::vector<in
 
         if(spaces.size() > 3) 
         {
-            // shrinks the spaces bu three for each row
+            // shrinks the spaces by three for each row
             spaces.resize(spaces.size() - 3);
         }
 
